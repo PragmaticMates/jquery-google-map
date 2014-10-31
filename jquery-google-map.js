@@ -18,7 +18,6 @@
 				},
 				zoom: 14,
 				markers: [],
-				enableGeolocation: false,
 				infowindow: {
 					borderBottomSpacing: 6,
 					height: 145,
@@ -74,7 +73,6 @@
 	}
 
 	$.fn.google_map = function (method) {
-		// Method calling logic
 		if (methods[method]) {
 			return methods[ method ].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
@@ -86,40 +84,25 @@
 
 	function loadMap() {
 		var mapOptions = {
-			zoom              : settings.zoom,
-			mapTypeId         : google.maps.MapTypeId.ROADMAP,
-			scrollwheel       : false,
-			draggable         : true,
-			mapTypeControl    : false,
-			panControl        : false,
-			zoomControl       : true,
+			zoom: settings.zoom,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			scrollwheel: false,
+			draggable: true,
+			mapTypeControl: false,
+			panControl: false,
+			zoomControl: true,
 			zoomControlOptions: {
-				style   : google.maps.ZoomControlStyle.SMALL,
+				style: google.maps.ZoomControlStyle.SMALL,
 				position: google.maps.ControlPosition.LEFT_BOTTOM
 			}
 		};
 
-		if (settings.enableGeolocation) {
-			if (navigator.geolocation) {
-				browserSupportFlag = true;
-				navigator.geolocation.getCurrentPosition(function (position) {
-					initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-					map.setCenter(initialLocation);
-				}, function () {
-					mapOptions.center = new google.maps.LatLng(settings.center.latitude, settings.center.longitude);
-				});
-			} else {
-				browserSupportFlag = false;
-				mapOptions.center = new google.maps.LatLng(settings.center.latitude, settings.center.longitude);
-			}
-		} else {
-			mapOptions.center = new google.maps.LatLng(settings.center.latitude, settings.center.longitude);
-		}
-
+		mapOptions.center = new google.maps.LatLng(settings.center.latitude, settings.center.longitude);
 		map = new google.maps.Map($(element)[0], mapOptions);
 
 		var dragFlag = false;
-		var start = 0, end = 0;
+		var start = 0
+		var end = 0;
 
 		function thisTouchStart(e) {
 			dragFlag = true;
@@ -198,16 +181,16 @@
 		}));
 
 		var newCluster = new InfoBox({
-			markers               : cluster.getMarkers(),
-			draggable             : true,
-			content               : '<div class="clusterer"><div class="clusterer-inner">' + cluster.getMarkers().length + '</div></div>',
-			disableAutoPan        : true,
-			pixelOffset           : new google.maps.Size(-21, -21),
-			position              : cluster.getCenter(),
-			closeBoxURL           : "",
-			isHidden              : false,
+			markers: cluster.getMarkers(),
+			draggable: true,
+			content: '<div class="clusterer"><div class="clusterer-inner">' + cluster.getMarkers().length + '</div></div>',
+			disableAutoPan: true,
+			pixelOffset: new google.maps.Size(-21, -21),
+			position: cluster.getCenter(),
+			closeBoxURL: "",
+			isHidden: false,
 			enableEventPropagation: true,
-			pane                  : "mapPane"
+			pane: "mapPane"
 		});
 
 		cluster.cluster = newCluster;
@@ -219,6 +202,7 @@
 
 	function renderElements() {
 		$.each(settings.markers, function (index, markerObject) {
+			// Create invisible markers on the map
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(markerObject.latitude, markerObject.longitude),
 				map: map,
@@ -248,7 +232,7 @@
 				marker.infobox.isOpen = false;
 			}
 
- 			// Create infobox for marker
+ 			// Create infowindow for marker
 			marker.marker = new InfoBox({
 				draggable: true,
 				content: '<div class="marker"><div class="marker-inner"></div></div>',
@@ -261,6 +245,7 @@
 				enableEventPropagation: true
 			});
 
+			// Handle logic for opening/closing info windows
 			marker.marker.isHidden = false;
 			marker.marker.open(map, marker);
 			markers.push(marker);
@@ -288,6 +273,7 @@
 			});
 		});
 
+
 		markerCluster = new MarkerClusterer(map, markers, {
             gridSize: settings.cluster.gridSize,
 			styles: [
@@ -300,9 +286,8 @@
 		});
 
 		clustersOnMap = new Array();
-
 		clusterListener = google.maps.event.addListener(markerCluster, 'clusteringend', function (clusterer) {
-			var availableClusters = clusterer.getClusters();			
+			var availableClusters = clusterer.getClusters();
 			var activeClusters = new Array();
 
 			$.each(availableClusters, function (index, cluster) {
