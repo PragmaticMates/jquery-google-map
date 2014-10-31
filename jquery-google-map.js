@@ -20,8 +20,8 @@
 				markers: [],
 				infowindow: {
 					borderBottomSpacing: 6,
-					height: 145,
-					width: 260
+					height: 150,
+					width: 340
 				},
 				marker: {
 					height: 32,
@@ -141,14 +141,11 @@
 			});
 		});
 
-		renderElements();
-
-		$('.infobox .close').live('click', function () {
-			$.each(markers, function (index, marker) {
-				marker.infobox.close();
-				marker.infobox.isOpen = false;
-			});
+		$('body .infowindow').on('click', function() {
+			alert('CAU');
 		});
+
+		renderElements();
 	}
 
 	function isClusterOnMap(clustersOnMap, cluster) {
@@ -190,7 +187,7 @@
 			closeBoxURL: "",
 			isHidden: false,
 			enableEventPropagation: true,
-			pane: "mapPane"
+			pane: "floatPane"
 		});
 
 		cluster.cluster = newCluster;
@@ -217,12 +214,8 @@
 			if (markerObject.content) {
 				marker.infobox = new InfoBox({
 					content: markerObject.content,
-					disableAutoPan: false,
-					maxWidth: 0,
+					disableAutoPan: true,
 					pixelOffset: new google.maps.Size(-settings.infowindow.width/2, -settings.infowindow.height - settings.marker.height - settings.infowindow.borderBottomSpacing),
-					zIndex: null,
-					closeBoxURL: "",
-					infoBoxClearance: new google.maps.Size(1, 1),
 					position: new google.maps.LatLng(markerObject.latitude, markerObject.longitude),
 					isHidden: false,
 					pane: "floatPane",
@@ -232,10 +225,10 @@
 				marker.infobox.isOpen = false;
 			}
 
- 			// Create infowindow for marker
+ 			// Create infobox for marker
 			marker.marker = new InfoBox({
 				draggable: true,
-				content: '<div class="marker"><div class="marker-inner"></div></div>',
+				content: markerObject.marker_content,
 				disableAutoPan: true,
 				pixelOffset: new google.maps.Size(-settings.marker.width/2, -settings.marker.height),
 				position: new google.maps.LatLng(markerObject.latitude, markerObject.longitude),
@@ -252,10 +245,8 @@
 
 			google.maps.event.addListener(marker, 'click', function (e) {
 				var curMarker = this;
-
 				$.each(markers, function (index, marker) {
-					// if marker is not the clicked marker, close the marker
-					if (marker !== curMarker && marker.content) {
+					if (marker !== curMarker) {
 						marker.infobox.close();
 						marker.infobox.isOpen = false;
 					}
@@ -272,7 +263,6 @@
 				}
 			});
 		});
-
 
 		markerCluster = new MarkerClusterer(map, markers, {
             gridSize: settings.cluster.gridSize,
@@ -353,6 +343,13 @@
 			});
 
 			clustersOnMap = newClustersOnMap;
+		});
+
+		$('.close').live('click', function() {
+			$.each(markers, function(index, marker) {
+				marker.infobox.isHidden = true;
+				marker.infobox.close();
+			});
 		});
 	}
 })(jQuery);
