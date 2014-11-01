@@ -1,3 +1,13 @@
+/*!
+ * jQuery Google Map
+ *
+ * @author Pragmatic Mates, http://pragmaticmates.com
+ * @version 1.0
+ * @license GPL 2
+ * @link https://github.com/PragmaticMates/jquery-google-map
+ */
+
+
 (function ($) {
 	var settings;
 	var element;
@@ -24,12 +34,12 @@
 					width: 340
 				},
 				marker: {
-					height: 32,
-					width: 32
+					height: 40,
+					width: 40
 				},
 				cluster: {
-					height: 32,
-					width: 32,
+					height: 40,
+					width: 40,
 					gridSize: 40
 				}
 			});
