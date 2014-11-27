@@ -111,7 +111,7 @@
 		map = new google.maps.Map($(element)[0], mapOptions);
 
 		var dragFlag = false;
-		var start = 0
+		var start = 0;
 		var end = 0;
 
 		function thisTouchStart(e) {
@@ -149,10 +149,6 @@
 				marker.infobox.close();
 				marker.infobox.isOpen = false;
 			});
-		});
-
-		$('body .infowindow').on('click', function() {
-			alert('CAU');
 		});
 
 		renderElements();
