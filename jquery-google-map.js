@@ -351,7 +351,7 @@
 			clustersOnMap = newClustersOnMap;
 		});
 
-		$('.close').live('click', function() {
+		$('.close').on('click', function() {
 			$.each(markers, function(index, marker) {
 				marker.infobox.isHidden = true;
 				marker.infobox.close();
