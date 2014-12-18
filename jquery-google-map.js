@@ -147,10 +147,12 @@
 		}
 
 		google.maps.event.addListener(map, 'zoom_changed', function () {
-			$.each(markers, function (index, marker) {
-				marker.infobox.close();
-				marker.infobox.isOpen = false;
-			});
+            $.each(markers, function (index, marker) {
+                if (marker.infobox !== undefined) {
+                    marker.infobox.close();
+                    marker.infobox.isOpen = false;
+                }
+            });
 		});
 
 		renderElements();
@@ -252,23 +254,26 @@
 			markers.push(marker);
 
 			google.maps.event.addListener(marker, 'click', function (e) {
-				var curMarker = this;
-				$.each(markers, function (index, marker) {
-					if (marker !== curMarker) {
-						marker.infobox.close();
-						marker.infobox.isOpen = false;
-					}
-				});
+                if (marker.infobx !== undefined) {
+                    var curMarker = this;
 
-				if (curMarker.infobox) {
-					if (curMarker.infobox.isOpen === false) {
-						curMarker.infobox.open(map, this);
-						curMarker.infobox.isOpen = true;
-					} else {
-						curMarker.infobox.close();
-						curMarker.infobox.isOpen = false;
-					}
-				}
+                    $.each(markers, function (index, marker) {
+                        if (marker !== curMarker) {
+                            marker.infobox.close();
+                            marker.infobox.isOpen = false;
+                        }
+                    });
+
+                    if (curMarker.infobox) {
+                        if (curMarker.infobox.isOpen === false) {
+                            curMarker.infobox.open(map, this);
+                            curMarker.infobox.isOpen = true;
+                        } else {
+                            curMarker.infobox.close();
+                            curMarker.infobox.isOpen = false;
+                        }
+                    }
+                }
 			});
 		});
 
@@ -278,7 +283,7 @@
 				{
 					height: settings.cluster.height,
 					url: settings.transparentClusterImage,
-					width: settings.cluster.width,
+					width: settings.cluster.width
 				}
 			]
 		});
