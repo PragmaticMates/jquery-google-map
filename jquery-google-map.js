@@ -26,6 +26,7 @@
 					latitude: 40.761077,
 					longitude: -73.983307
 				},
+				styles: null,
 				zoom: 14,
 				markers: [],
 				infowindow: {
@@ -95,6 +96,7 @@
 	function loadMap() {
 		var mapOptions = {
 			zoom: settings.zoom,
+			styles: settings.styles,
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
 			scrollwheel: false,
 			draggable: true,
