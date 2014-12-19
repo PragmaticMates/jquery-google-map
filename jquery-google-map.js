@@ -358,11 +358,13 @@
 			clustersOnMap = newClustersOnMap;
 		});
 
-		$('.close').on('click', function() {
-			$.each(markers, function(index, marker) {
-				marker.infobox.isHidden = true;
-				marker.infobox.close();
-			});
-		});
+        $(document).on('click', '.infobox a', function(e) {
+            e.preventDefault();
+
+            $.each(markers, function(index, marker) {
+                marker.infobox.isHidden = true;
+                marker.infobox.close();
+            });
+        });
 	}
 })(jQuery);
