@@ -254,7 +254,7 @@
 			markers.push(marker);
 
 			google.maps.event.addListener(marker, 'click', function (e) {
-                if (marker.infobx !== undefined) {
+                if (marker.infobox !== undefined) {
                     var curMarker = this;
 
                     $.each(markers, function (index, marker) {
