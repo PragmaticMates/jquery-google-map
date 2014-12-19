@@ -32,7 +32,9 @@
 				infowindow: {
 					borderBottomSpacing: 6,
 					height: 150,
-					width: 340
+					width: 340,
+                    offsetX: -21,
+                    offsetY: -21
 				},
 				marker: {
 					height: 40,
@@ -225,9 +227,10 @@
 				marker.infobox = new InfoBox({
 					content: markerObject.content,
 					disableAutoPan: true,
-					pixelOffset: new google.maps.Size(-settings.infowindow.width/2, -settings.infowindow.height - settings.marker.height - settings.infowindow.borderBottomSpacing),
+					pixelOffset: new google.maps.Size(settings.infowindow.offsetX, settings.infowindow.offsetY, settings.infowindow.offsetX, settings.infowindow.offsetY),
 					position: new google.maps.LatLng(markerObject.latitude, markerObject.longitude),
 					isHidden: false,
+                    closeBoxURL: "",
 					pane: "floatPane",
 					enableEventPropagation: false
 				});
@@ -358,7 +361,7 @@
 			clustersOnMap = newClustersOnMap;
 		});
 
-        $(document).on('click', '.infobox a', function(e) {
+        $(document).on('click', '.infobox .close', function(e) {
             e.preventDefault();
 
             $.each(markers, function(index, marker) {
