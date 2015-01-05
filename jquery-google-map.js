@@ -214,12 +214,15 @@
 			// Create invisible markers on the map
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(markerObject.latitude, markerObject.longitude),
-				map: map,
-				icon: {
+				map: map
+			});
+
+			if (settings.marker.width && settings.marker.height && settings.transparentMarkerImage) {
+				marker['icon'] = {
 					size: new google.maps.Size(settings.marker.width, settings.marker.height),
 					url: settings.transparentMarkerImage
-				}
-			});
+				};
+			}
 
 
 			// Create infobox for infowindow
