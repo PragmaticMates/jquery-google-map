@@ -22,10 +22,6 @@
 			element = $(this);
 
 			var defaults = $.extend({
-				center: {
-					latitude: 40.761077,
-					longitude: -73.983307
-				},
 				styles: null,
 				zoom: 14,
 				markers: [],
@@ -111,8 +107,19 @@
 			}
 		};
 
-		mapOptions.center = new google.maps.LatLng(settings.center.latitude, settings.center.longitude);
+        if (settings.center !== undefined) {
+            mapOptions.center = new google.maps.LatLng(settings.center.latitude, settings.center.longitude);
+        }
+
 		map = new google.maps.Map($(element)[0], mapOptions);
+
+        if (settings.center === undefined) {
+            var bound = new google.maps.LatLngBounds();
+            for (var i in settings.markers) {
+                bound.extend(new google.maps.LatLng(settings.markers[i].latitude, settings.markers[i].longitude));
+            }
+            map.fitBounds(bound);
+        }
 
 		var dragFlag = false;
 		var start = 0;
@@ -212,18 +219,19 @@
 	function renderElements() {
 		$.each(settings.markers, function (index, markerObject) {
 			// Create invisible markers on the map
-			var marker = new google.maps.Marker({
+			var args = {
 				position: new google.maps.LatLng(markerObject.latitude, markerObject.longitude),
-				map: map
-			});
+				map: map,				
+			};
 
-			if (settings.marker.width && settings.marker.height && settings.transparentMarkerImage) {
-				marker['icon'] = {
-					size: new google.maps.Size(settings.marker.width, settings.marker.height),
-					url: settings.transparentMarkerImage
+			if (settings.transparentMarkerImage) {
+				args['icon'] = {
+					url: settings.transparentMarkerImage,
+					size: new google.maps.Size(settings.marker.width, settings.marker.height)
 				};
 			}
-
+			
+			var marker = new google.maps.Marker(args);
 
 			// Create infobox for infowindow
 			if (markerObject.content) {
