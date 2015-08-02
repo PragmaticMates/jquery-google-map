@@ -2,7 +2,7 @@
  * jQuery Google Map
  *
  * @author Pragmatic Mates, http://pragmaticmates.com
- * @version 1.0
+ * @version 1.1
  * @license GPL 2
  * @link https://github.com/PragmaticMates/jquery-google-map
  */
@@ -22,6 +22,7 @@
 			element = $(this);
 
 			var defaults = $.extend({
+				geolocation: false,
 				styles: null,
 				zoom: 14,
 				markers: [],
@@ -46,7 +47,6 @@
 			settings = $.extend({}, defaults, options);
 
 			loadMap();
-			// google.maps.event.addDomListener(window, 'load', loadMap);
 
 			if (options.callback) {
 				options.callback();
@@ -112,6 +112,21 @@
         }
 
 		map = new google.maps.Map($(element)[0], mapOptions);
+
+		if (settings.geolocation) {
+			if (navigator.geolocation) {
+				browserSupportFlag = true;
+				navigator.geolocation.getCurrentPosition(function (position) {
+					initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+					map.setCenter(initialLocation);
+				}, function () {
+					map.center = new google.maps.LatLng(settings.center.latitude, settings.center.longitude);
+				});
+			} else {
+				browserSupportFlag = false;
+				map.center = new google.maps.LatLng(settings.center.latitude, settings.center.longitude);
+			}
+		}
 
         if (settings.center === undefined) {
             var bound = new google.maps.LatLngBounds();
@@ -221,7 +236,7 @@
 			// Create invisible markers on the map
 			var args = {
 				position: new google.maps.LatLng(markerObject.latitude, markerObject.longitude),
-				map: map,				
+				map: map,
 			};
 
 			if (settings.transparentMarkerImage) {
@@ -230,7 +245,7 @@
 					size: new google.maps.Size(settings.marker.width, settings.marker.height)
 				};
 			}
-			
+
 			var marker = new google.maps.Marker(args);
 
 			// Create infobox for infowindow
