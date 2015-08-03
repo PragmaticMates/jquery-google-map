@@ -310,6 +310,7 @@
             gridSize: settings.cluster.gridSize,
 			styles: [
 				{
+					textColor: 'transparent',
 					height: settings.cluster.height,
 					url: settings.transparentClusterImage,
 					width: settings.cluster.width
